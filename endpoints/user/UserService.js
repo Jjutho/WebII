@@ -95,7 +95,17 @@ const deleteUserById = (userID, callback) => {
 
 // change admin status
 const changeAdministratorStatus = (userID, isAdminstrator, callback) => {
-  User.
+  User.updateOne({
+    "userID": userID
+  }, {
+    "isAdministrator": isAdminstrator
+  }, (err, result) => {
+    if (result.nModified == 0) {
+      callback(err);
+    } else {
+      callback(null, result);
+    }
+  });
 }
 
 module.exports = {
