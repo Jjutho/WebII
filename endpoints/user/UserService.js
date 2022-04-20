@@ -19,12 +19,12 @@ const createUser = (body, callback) => {
 
 // get all users
 const getUsers = (callback) => {
-  let query = User.find({}).select({
+  User.find({}).select({
     "userID": 1,
     "userName": 1,
     "isAdministrator": 1,
     "_id": 0
-  }, (err, users) => {
+  }).exec((err, users) => {
     if (err) {
       callback(err);
     } else {
@@ -39,13 +39,12 @@ const findUserById = (userID, callback) => {
     return;
   }
 
-  let query = User.findOne({userID: userID}).select({
+  User.findOne({userID: userID}).select({
     "userID": 1,
     "userName": 1,
     "isAdministrator": 1,
     "_id": 0
-  });
-  query.exec((err, user) => {
+  }).exec((err, user) => {
     if (err) {
       console.log(err);
       callback(err);
@@ -112,5 +111,6 @@ module.exports = {
   createUser,
   getUsers,
   findUserById,
-  deleteUserById
+  deleteUserById,
+  changeAdministratorStatus
 }

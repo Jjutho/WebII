@@ -13,16 +13,16 @@ GET http://localhost:8080/users/admin
 GET http://localhost:8080/users/
 
 ###
-GET http://localhost:8080/users/1
+POST http://localhost:8080/users/3/false
 
 ###
 POST http://localhost:8080/users/
 content-Type: application/json
 
 {
-    "userID": "3",
+    "userID": "5",
     "userName": "ThridTestUser"
 }
 
 ###
-DELETE http://localhost:8080/users/6
+DELETE http://localhost:8080/users/4
