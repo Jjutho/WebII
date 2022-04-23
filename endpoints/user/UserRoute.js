@@ -45,10 +45,9 @@ UserRouter.get('/:userID', (req, res, next) => {
 UserRouter.delete("/:userID", (req, res, next) => {
   UserService.deleteUserById(req.params.userID, (err, result) => {
     if(result) {
-      /*res.status(200).json({
+      res.status(200).json({
         Message: `User with ID ${req.params.userID} succesfully deleted`
-      })*/
-      res.send(result);
+      });
     } else {
       res.status(500).json({
         Error: `No user with ID ${req.params.userID} found, therefore deletion failed`

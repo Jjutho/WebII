@@ -1,0 +1,103 @@
+// get all users, expected response: []
+###
+GET http://localhost:8080/publicUsers
+
+// delete all users
+###
+DELETE http://localhost:8080/publicUsers
+
+// create admin by get /admin
+###
+GET http://localhost:8080/publicUsers/admin
+
+// create first user who is admin, expected response: { userId, username, password, role, createdAt, email }
+###
+POST http://localhost:8080/publicUsers
+Content-Type: application/json
+
+{
+    "userID": "admin",
+    "password": "123",
+    "isAdministrator": true,
+    "email": "admin@app.com"
+}
+
+// try to create first user again, expected response: { error: "User already exists" }
+###
+POST http://localhost:8080/publicUsers
+Content-Type: application/json
+
+{
+    "userID": "admin",
+    "password": "123",
+    "isAdministrator": true,
+    "email": "admin@app.com"
+}
+
+// try to create user with missing information, expected response: { error: "Missing information" }
+###
+POST http://localhost:8080/publicUsers
+Content-Type: application/json
+
+{
+    "password": "123"
+}
+
+// find user by id, expected response: { userId, username, password, role, createdAt, email }
+###
+GET http://localhost:8080/publicUsers/admin
+
+// find non existing user, expected response: { error: "User not found" }
+###
+GET http://localhost:8080/publicUsers/nonExistingUser
+
+// create second user who is not admin, expected response: { userId, username, password, role, createdAt, email }
+###
+POST http://localhost:8080/publicUsers
+Content-Type: application/json
+
+{
+    "userID": "firstUser",
+    "password": "123"
+}
+
+// delete user by id, expected response: { message: "success" }
+###
+DELETE http://localhost:8080/publicUsers/firstUser
+
+// repeat delete user by id, expected response: { error: "User not found" }
+###
+DELETE http://localhost:8080/publicUsers/firstUser
+
+// create third user who is not admin, expected response: { userId, username, password, role, createdAt, email }
+###
+POST http://localhost:8080/publicUsers
+Content-Type: application/json
+
+{
+    "userID": "secondUser",
+    "userName": "Gerhardt",
+    "password": "123"
+}
+
+//  update user name, expected response: { userId, username, password, role, createdAt, email }
+###
+PUT http://localhost:8080/publicUsers/secondUser
+Content-Type: application/json
+
+{
+  "userName": "Manfred Mülller"
+}
+
+//  update user name of non existing user, expected response: { error: "User not found" }
+###
+PUT http://localhost:8080/publicUsers/thirdUser
+Content-Type: application/json
+
+{
+  "userName": "Manfred Mülller"
+}
+
+// delete all users
+###
+DELETE http://localhost:8080/publicUsers

@@ -5,30 +5,42 @@ const { port } = require('./config/config');
 
 const database = require('./database/db');
 
+const PublicUserRouter = require('./endpoints/publicUser/PublicUserRoute');
 const UserRouter = require('./endpoints/user/UserRoute');
 const AuthRouter = require('./endpoints/authentification/AuthenticationRoute');
 
 app.use( bodyparser.json());
 
+app.use('/publicUsers', PublicUserRouter)
 app.use('/users', UserRouter);
 app.use('/authenticate', AuthRouter);
 
 database.initDB((err, db) => {
   if (db) {
-    console.log("DB is connected");
+    console.log("DB connection established");
   } else {
-    console.log("DB is not connected");
+    console.log("DB connection failed");
   }
 });
 
 app.use((err, req, res, next) => {
-  res.status(500).send('Internal Server Error');
+  res.status(500).json({
+    Error: err.message
+  });
 });
 
 app.use((req, res, next) => {
-  res.status(404).send('URL Not Found');
+  res.status(404).json({
+    Error: 'Ressource not found'
+  });
+});
+
+app.use((req, res, next) => {
+  res.status(400).json({
+    Error: 'Bad request'
+  });
 });
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
+  console.log(`Web Engineering app listening on port ${port}`);
 });

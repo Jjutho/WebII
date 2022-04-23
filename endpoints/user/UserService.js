@@ -5,7 +5,8 @@ const createUser = (body, callback) => {
   User.create({
     "userID": body.userID,
     "userName": body.userName,
-    "isAdministrator": body.isAdministrator || false
+    "isAdministrator": body.isAdministrator || false,
+    "password": body.password
   }, (err, user) => {
     if (err) {
       callback(err);

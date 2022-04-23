@@ -1,11 +1,13 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
+const bcryptjs = require('bcryptjs');
 
 const UserSchema = new mongoose.Schema({
   userID: { type: String, unique: true, required: true },
-  userName: String,
-  password: String,
-  isAdministrator: {type: Boolean, default: false}
+  userName: { type: String, default: 'Anonymous' },
+  password: { type: String, required: true },
+  isAdministrator: {type: Boolean, default: false},
+  email: String,
+  createdAt: { type: Date, default: Date.now }
 }, { timestamps: true}
 );
 
@@ -19,7 +21,7 @@ UserSchema.pre('save', function(next) {
   console.log(`Pre-save: ${this.password} change: ${this.isModified('password')}`);
 
   if (this.isModified('password')) {
-    bcrypt.hash(this.password, 10, (err, hash) => {
+    bcryptjs.hash(this.password, 10, (err, hash) => {
       if (err) {
         return next(err);
       }
@@ -32,7 +34,7 @@ UserSchema.pre('save', function(next) {
 });
 
 UserSchema.methods.comparePassword = function(passwordInput, next) {
-  bcrypt.compare(passwordInput, this.password, function(err, isMatch) {
+  bcryptjs.compare(passwordInput, this.password, function(err, isMatch) {
     if (err) {
       return next(err);
     }
