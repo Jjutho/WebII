@@ -3,21 +3,23 @@ const AuthRouter = express.Router();
 
 const AuthService = require('./AuthentificationService');
 
-AuthRouter.post('/login', (req, res, next) => {
-  AuthService.createSessionToken(req.body, (err, token, user) => {
+AuthRouter.post('/', (req, res, next) => {
+  AuthService.createSessionToken(req.body, (msg, token, user, code) => {
     if (token) {
-      res.header('Authorization', 'Bearer', token);
-
+      res.setHeader('Authorization', 'Bearer ' + token);
       if (user) {
-        const { id, userID, userName, ...partialObject} = user;
-        const subset = { id, userID, userName };
-        res.send(subset);
+        res.status(code).json({
+          Success: msg
+        });
       } else {
-        console.log('No user found');
-        res.send('No user found, created token anyway');
+        res.status(code).json({
+          Error: msg
+        });
       }
     } else {
-      res.send('Could not create token');
+      res.status(code).json({
+        Error: msg
+      });
     }
   });
 });

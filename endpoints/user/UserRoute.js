@@ -6,12 +6,12 @@ const UserService = require('./UserService');
 
 // create user
 UserRouter.post('/', (req, res, next) => {
-  UserService.createUser(req.body, (err, user) => {
+  UserService.createUser(req.body, (msg, user, code) => {
     if (user) {
-      res.status(200).json(user);
+      res.status(code).json(user);
     } else {
-      res.status(500).json({
-        Error: 'Something went wrong while creating new user'
+      res.status(code).json({
+        Error: msg
       });
     }
   });
@@ -19,57 +19,89 @@ UserRouter.post('/', (req, res, next) => {
 
 // get all users
 UserRouter.get('/', (req, res, next) => {
-  UserService.getUsers((err, users) => {
-    if (err) {
-      next(err);
+  UserService.getUsers((msg, users, code) => {
+    if (users) {
+      res.status(code).json(users);
     } else {
-      res.status(200).json(users);
+      res.status(code).json({
+        Error: msg
+      });
     }
   });
 });
 
 // get user by ID
 UserRouter.get('/:userID', (req, res, next) => {
-  UserService.findUserById(req.params.userID, (err, user) => {
+  UserService.findUserById(req.params.userID, (msg, user, code) => {
     if (user) {
-      res.status(200).json(user);
+      res.status(code).json({
+        userID: user.userID,  
+        userName: user.userName,
+        isAdministrator: user.isAdministrator,
+        email: user.email
+      });
     } else {
-      res.status(404).json({
-        Error: `No user with ID ${req.params.userID} found`
+      res.status(code).json({
+        Error: msg
       });
     }
   });
 });
 
 // delete user by ID
-UserRouter.delete("/:userID", (req, res, next) => {
-  UserService.deleteUserById(req.params.userID, (err, result) => {
+UserRouter.delete('/:userID', (req, res, next) => {
+  UserService.deleteUserById(req.params.userID, (msg, result, code) => {
     if(result) {
-      res.status(200).json({
-        Message: `User with ID ${req.params.userID} succesfully deleted`
+      res.status(code).json({
+        Success: msg
       });
     } else {
-      res.status(500).json({
-        Error: `No user with ID ${req.params.userID} found, therefore deletion failed`
+      res.status(code).json({
+        Error: msg
       })
     }
   })
-})
+});
 
-UserRouter.post("/:userID/:isAdministrator", (req, res, next) => {
-  UserService.changeAdministratorStatus(req.params.userID, req.params.isAdministrator, (err) => {
-    if (err) {
-      res.status(500).json({
-        Error: `Failed to change Administrator status of user with ID ${req.params.userID}`
+// FOR DEV ONLY delete all users
+UserRouter.delete('/', (req, res, next) => {
+  UserService.deleteAllUsers((err, result) => {
+    if(result) {
+      res.status(200).json({
+        Success: `All users succesfully deleted`
       });
     } else {
-      res.status(200).json({
-        Message: `Succesfully changed Adminstrator status of user with ID ${req.params.userID} to ${req.params.isAdministrator}`
+      res.status(500).json({
+        Error: `Could not delete all users`
+      })
+    }
+  })
+});
+
+// update administrator status
+UserRouter.post('/:userID/:isAdministrator', (req, res, next) => {
+  UserService.changeAdministratorStatus(req.params.userID, req.params.isAdministrator, (msg, user, code) => {
+    if (user) {
+      res.status(code).json(user)
+    } else {
+      res.status(code).json({
+        Error: msg
       });
     }
   });
 });
 
-
+// update user
+UserRouter.put('/:userID', (req, res, next) => {
+  UserService.updateUserById(req.params.userID, req.body, (msg, user, code) => {
+    if (user) {
+      res.status(code).json(user)
+    } else {
+      res.status(code).json({
+        Error: msg
+      });
+    }
+  });
+});
 
 module.exports = UserRouter;

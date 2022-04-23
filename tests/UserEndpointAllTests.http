@@ -1,18 +1,18 @@
 // get all users, expected response: []
 ###
-GET http://localhost:8080/publicUsers
+GET http://localhost:8080/users
 
 // delete all users
 ###
-DELETE http://localhost:8080/publicUsers
+DELETE http://localhost:8080/users
 
 // create admin by get /admin
 ###
-GET http://localhost:8080/publicUsers/admin
+GET http://localhost:8080/users/admin
 
 // create first user who is admin, expected response: { userId, username, password, role, createdAt, email }
 ###
-POST http://localhost:8080/publicUsers
+POST http://localhost:8080/users
 Content-Type: application/json
 
 {
@@ -24,7 +24,7 @@ Content-Type: application/json
 
 // try to create first user again, expected response: { error: "User already exists" }
 ###
-POST http://localhost:8080/publicUsers
+POST http://localhost:8080/users
 Content-Type: application/json
 
 {
@@ -36,7 +36,7 @@ Content-Type: application/json
 
 // try to create user with missing information, expected response: { error: "Missing information" }
 ###
-POST http://localhost:8080/publicUsers
+POST http://localhost:8080/users
 Content-Type: application/json
 
 {
@@ -45,44 +45,47 @@ Content-Type: application/json
 
 // find user by id, expected response: { userId, username, password, role, createdAt, email }
 ###
-GET http://localhost:8080/publicUsers/admin
+GET http://localhost:8080/users/admin
+
+###
+GET http://localhost:8080/users/firstUser
 
 // find non existing user, expected response: { error: "User not found" }
 ###
-GET http://localhost:8080/publicUsers/nonExistingUser
+GET http://localhost:8080/users/nonExistingUser
 
 // create second user who is not admin, expected response: { userId, username, password, role, createdAt, email }
 ###
-POST http://localhost:8080/publicUsers
+POST http://localhost:8080/users
 Content-Type: application/json
 
 {
     "userID": "firstUser",
-    "password": "123"
+    "password": "456"
 }
 
 // delete user by id, expected response: { message: "success" }
 ###
-DELETE http://localhost:8080/publicUsers/firstUser
+DELETE http://localhost:8080/users/firstUser
 
 // repeat delete user by id, expected response: { error: "User not found" }
 ###
-DELETE http://localhost:8080/publicUsers/firstUser
+DELETE http://localhost:8080/users/firstUser
 
 // create third user who is not admin, expected response: { userId, username, password, role, createdAt, email }
 ###
-POST http://localhost:8080/publicUsers
+POST http://localhost:8080/users
 Content-Type: application/json
 
 {
     "userID": "secondUser",
     "userName": "Gerhardt",
-    "password": "testhdssdf"
+    "password": "123"
 }
 
 //  update user name, expected response: { userId, username, password, role, createdAt, email }
 ###
-PUT http://localhost:8080/publicUsers/secondUser
+PUT http://localhost:8080/users/secondUser
 Content-Type: application/json
 
 {
@@ -91,7 +94,7 @@ Content-Type: application/json
 
 //  update user name of non existing user, expected response: { error: "User not found" }
 ###
-PUT http://localhost:8080/publicUsers/thirdUser
+PUT http://localhost:8080/users/thirdUser
 Content-Type: application/json
 
 {
@@ -100,4 +103,4 @@ Content-Type: application/json
 
 // delete all users
 ###
-DELETE http://localhost:8080/publicUsers
+DELETE http://localhost:8080/users
