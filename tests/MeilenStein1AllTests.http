@@ -40,7 +40,7 @@ POST http://localhost:8080/publicUsers
 Content-Type: application/json
 
 {
-    "password": "123"
+    "userID": "123"
 }
 
 // find user by id, expected response: { userId, username, password, role, createdAt, email }
@@ -82,11 +82,12 @@ Content-Type: application/json
 
 //  update user name, expected response: { userId, username, password, role, createdAt, email }
 ###
-PUT http://localhost:8080/publicUsers/secondUser
+PUT http://localhost:8080/publicUsers/123
 Content-Type: application/json
 
 {
-  "userName": "Manfred Mülller"
+  "userName": "Manf",
+  "password": "testhdssdf"
 }
 
 //  update user name of non existing user, expected response: { error: "User not found" }

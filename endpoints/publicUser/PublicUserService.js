@@ -3,8 +3,8 @@ const User = require('../user/UserModel');
 // create user
 const createUser = (body, callback) => {
   const { userID, password } = body;
-  if (!userID || !password) {
-    callback('Please provide userID and password', null, 400);
+  if (!userID) {
+    callback('Please provide a userID', null, 400);
   } else {
     User.create({
       "userID": body.userID,
@@ -15,7 +15,7 @@ const createUser = (body, callback) => {
     }, (err, user) => {
       if (err) {
         if (err.code == 11000) {
-          callback(`User with ID ${body.userID} already exists`, null, 400);
+          callback(`User with ID ${body.userID} already exists`, null, 409);
         } else {
           callback(`Creation of user with ID ${body.userID} failed`, null, 500);
         }
@@ -44,7 +44,7 @@ const getUsers = (callback) => {
 
 // find user by ID
 const findUserById = (userID, callback) => {
-  User.findOne({userID: userID}).select({
+  User.findOne({"userID": userID}).select({
     "_id": 0,
     "__v": 0
   }).exec((err, user) => {
@@ -91,7 +91,7 @@ const deleteUserById = (userID, callback) => {
       if (result.deletedCount == 0) {
         callback(`No user with ID ${userID} found`, null, 404);
       } else {
-        callback(`User with ID ${userID} succesfully deleted`, true, 200);
+        callback(`User with ID ${userID} succesfully deleted`, true, 204);
       };
     }
   });
@@ -139,31 +139,22 @@ const changeAdministratorStatus = (userID, isAdministrator, callback) => {
 
 // update user by ID
 const updateUserById = (userID, body, callback) => {
-  if (!body.userName || body.userName == '') {
-    callback('Please provide a userName', null, 400);
-  } else {
-    User.findOneAndUpdate({
-      "userID": userID
-    }, { 
-      "userName": body.userName
-    }, {
-      returnOriginal: false,
-      rawResult: true
-    },(err, result) => {
-      if (err) {
-        callback(`Internal Server Error`, null, 500);
-      } else {
-        if (result.lastErrorObject.updatedExisting == false) {
-          callback(`No user with ID ${userID} found`, null, 404);
+  User.findOne({"userID": userID}, (err, user) => {
+    if (user) {
+      Object.assign(user, body);
+      user.save((err) => {
+        if (err) {
+          callback(err, null, 500);
         } else {
-          callback(null, result.value, 200);
+          const { userID, userName, isAdministrator, password, email, createdAt, updatedAt, ...partialObject} = user;
+        const subset = { userID, userName, isAdministrator, password, email, createdAt, updatedAt};
+          callback(null, subset, 200);
         }
-      }
-    }).select({
-      "_id": 0,
-      "__v": 0
-    });
-  }
+      });
+    } else {
+      callback(`No user with ID ${userID} found`, null, 404);
+    }
+  });
 };
 
 module.exports = {
