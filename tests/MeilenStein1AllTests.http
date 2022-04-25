@@ -87,7 +87,8 @@ Content-Type: application/json
 
 {
   "userName": "Manf",
-  "password": "testhdssdf"
+  "password": "testhdssdf",
+  "email": "test@test.com"
 }
 
 //  update user name of non existing user, expected response: { error: "User not found" }
