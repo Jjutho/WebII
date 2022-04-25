@@ -40,7 +40,7 @@ POST http://localhost:8080/publicUsers
 Content-Type: application/json
 
 {
-    "userID": "123"
+    "password": "123"
 }
 
 // find user by id, expected response: { userId, username, password, role, createdAt, email }
@@ -82,7 +82,7 @@ Content-Type: application/json
 
 //  update user name, expected response: { userId, username, password, role, createdAt, email }
 ###
-PUT http://localhost:8080/publicUsers/123
+PUT http://localhost:8080/publicUsers/secondUser
 Content-Type: application/json
 
 {
