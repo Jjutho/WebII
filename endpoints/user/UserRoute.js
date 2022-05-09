@@ -3,6 +3,7 @@ const UserRouter = express.Router();
 
 const UserService = require('./UserService');
 
+const auth = require('../../utils/auth');
 
 // create user
 UserRouter.post('/', (req, res, next) => {
@@ -18,7 +19,7 @@ UserRouter.post('/', (req, res, next) => {
 });
 
 // get all users
-UserRouter.get('/', (req, res, next) => {
+UserRouter.get('/', auth.isAuthenticated, auth.isAdministrator, (req, res, next) => {
   UserService.getUsers((msg, users, code) => {
     if (users) {
       res.status(code).json(users);
@@ -76,19 +77,6 @@ UserRouter.delete('/', (req, res, next) => {
       })
     }
   })
-});
-
-// update administrator status
-UserRouter.post('/:userID/:isAdministrator', (req, res, next) => {
-  UserService.changeAdministratorStatus(req.params.userID, req.params.isAdministrator, (msg, user, code) => {
-    if (user) {
-      res.status(code).json(user)
-    } else {
-      res.status(code).json({
-        Error: msg
-      });
-    }
-  });
 });
 
 // update user

@@ -1,6 +1,7 @@
 // get all users, expected response: []
 ###
 GET http://localhost:8080/users
+Authorization: Basic admin:123
 
 // delete all users
 ###

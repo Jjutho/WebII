@@ -3,8 +3,8 @@ const AuthRouter = express.Router();
 
 const AuthService = require('./AuthentificationService');
 
-AuthRouter.post('/', (req, res, next) => {
-  AuthService.createSessionToken(req.body, (msg, token, user, code) => {
+AuthRouter.get('/', (req, res, next) => {
+  AuthService.createSessionToken(req.headers.authorization, (msg, token, user, code) => {
     if (token) {
       res.setHeader('Authorization', 'Bearer ' + token);
       if (user) {

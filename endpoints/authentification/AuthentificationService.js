@@ -6,10 +6,12 @@ const createSessionToken = (props, callback) => {
   if (!props) {
     callback('No props provided', null, null, 400);
   } 
-  
-  UserService.findUserById(props.userID, function(msg, user, code) {
+  const login = Buffer.from(props.split(" ")[1], 'base64').toString();
+  const userID = login.split(":")[0];
+  const password = login.split(":")[1];
+  UserService.findUserById(userID, function(msg, user, code) {
     if (user) {
-      user.comparePassword(props.password, function(err, isMatch) {
+      user.comparePassword(password, function(err, isMatch) {
         if (err) {
           callback('Internal Server Error', null, null, 500);
         } else {
@@ -21,7 +23,8 @@ const createSessionToken = (props, callback) => {
 
             const token = jwt.sign(
               { 
-                "user": user.userID 
+                "user": user.userID,
+                "isAdministrator": user.isAdministrator
               },
               privateKey,
               { 
@@ -30,7 +33,7 @@ const createSessionToken = (props, callback) => {
               }
             );
 
-            const { userID, userName, isAdministrator, email, ...partialObject} = user;
+            const { userID, userName, isAdministrator, email } = user;
             const subset = { userID, userName, isAdministrator, email};
             callback(`Token created successfully`, token, subset, 200);
           } else {
@@ -41,7 +44,7 @@ const createSessionToken = (props, callback) => {
     } else {
       callback(`Failed to create token: No user with ID ${props.userID} found`, null, null, 404);
     }
-  });
+  }, false);
 }
 
 module.exports = {

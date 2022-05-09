@@ -2,15 +2,15 @@ const User = require('./UserModel');
 
 // create user
 const createUser = (body, callback) => {
-  const { userID, password } = body;
-  if (!userID || !password) {
-    callback('Please provide userID and password', null, 400);
+  const { userID } = body;
+  if (!userID) {
+    callback('Please provide a userID', null, 400);
   } else {
     User.create({
       "userID": body.userID,
       "userName": body.userName || 'Anonymous',
       "isAdministrator": body.isAdministrator || false,
-      "password": body.password,
+      "password": body.password || '',
       "email": body.email || ''
     }, (err, user) => {
       if (err) {
@@ -20,15 +20,9 @@ const createUser = (body, callback) => {
           callback(`Creation of user with ID ${body.userID} failed`, null, 500);
         }
       } else {
-        const { userID, userName, isAdministrator, email, ...partialObject} = user;
+        const { userID, userName, isAdministrator, email } = user;
         const subset = { userID, userName, isAdministrator, email};
-        user.save(function(err) {
-          if (err) {
-            callback(`Hashing password of user with ID ${userID} failed`, null, 500);
-          } else {
-            callback(null, subset, 200);
-          }
-        });
+        callback(null, subset, 200);
       }
     });
   }
@@ -37,50 +31,37 @@ const createUser = (body, callback) => {
 // get all users
 const getUsers = (callback) => {
   User.find({}).select({
-    "userID": 1,
-    "userName": 1,
-    "isAdministrator": 1,
-    "email": 1,
-    "_id": 0
+    "_id": 0,
+    "__v": 0
   }).exec((err, users) => {
     if (err) {
       callback('Error while getting users', null, 500);
     } else {
-      callback(null, users, 200);
+      let filteredUsers = users.map(user => {
+        const { userID, userName, isAdministrator, email } = user;
+        return { userID, userName, isAdministrator, email};
+      });
+      callback(null, filteredUsers, 200);
     }
   });
 };
 
 // find user by ID
-const findUserById = (userID, callback) => {
+const findUserById = (userID, callback, filter) => {
   User.findOne({userID: userID}).exec((err, user) => {
     if (err) {
       callback(`Getting user with ID ${userID} failed`, null, 500);
     } else {
       if (user) {
-        callback(null, user, 200);
-      } else {
-        if ('admin' == userID) {
-          let adminUser = new User({
-            userID: 'admin',
-            password: '123',
-            userName: 'Default Admin Account',
-            isAdministrator: true,
-            email: 'admin@app.com'
-          });
-          const { userID, userName, isAdministrator, email, ...partialObject} = adminUser;
-          const adminUserSubset = { userID, userName, isAdministrator, email};
-        
-          adminUser.save(function(err) {
-            if (err) {
-              callback(`Hashing password of user with ID ${userID} failed`, null, 500);
-            } else {
-              callback(null, adminUserSubset, 200);
-            }
-          });
+        if (filter) {
+          const { userID, userName, isAdministrator, email } = user;
+          const subset = { userID, userName, isAdministrator, email};
+          callback(null, subset, 200);
         } else {
-          callback(`No user with ID ${userID} found`, null, 404);     
-        };
+          callback(null, user, 200);
+        }
+      } else {
+        callback(`No user with ID ${userID} found`, null, 404);     
       }
     }
   });
@@ -97,7 +78,7 @@ const deleteUserById = (userID, callback) => {
       if (result.deletedCount == 0) {
         callback(`No user with ID ${userID} found`, null, 404);
       } else {
-        callback(`User with ID ${userID} succesfully deleted`, true, 200);
+        callback(`User with ID ${userID} succesfully deleted`, true, 204);
       };
     }
   });
@@ -114,68 +95,52 @@ const deleteAllUsers = (callback) => {
   });
 };
 
-// change admin status
-const changeAdministratorStatus = (userID, isAdministrator, callback) => {
-  if (isAdministrator != 'true' && isAdministrator != 'false') {
-    callback('Please provide a valid value for isAdministrator', null, 400);
-  } else {
-    User.findOneAndUpdate({
-      "userID": userID
-    }, {
-      "isAdministrator": isAdministrator
-    }, {
-      returnOriginal: false,
-      rawResult: true
-    }, (err, result) => {
-      if (err) {
-        callback(`Internal Server Error`, null, 500);
-      } else {
-        if (result.lastErrorObject.updatedExisting == false) {
-          callback(`No user with ID ${userID} found`, null, 404);
-        } else {
-          callback(null, result.value, 200);
-        }
-      }
-    }).select({
-      "userID": 1,
-      "userName": 1,
-      "isAdministrator": 1,
-      "email": 1,
-      "_id": 0
-    });
-  }
-}
-
 // update user by ID
 const updateUserById = (userID, body, callback) => {
-  if (!body.userName || body.userName == '') {
-    callback('Please provide a userName', null, 400);
-  } else {
-    User.findOneAndUpdate({
-      "userID": userID
-    }, { 
-      "userName": body.userName
-    }, {
-      returnOriginal: false,
-      rawResult: true
-    },(err, result) => {
-      if (err) {
-        callback(`Internal Server Error`, null, 500);
-      } else {
-        if (result.lastErrorObject.updatedExisting == false) {
-          callback(`No user with ID ${userID} found`, null, 404);
+  User.findOne({"userID": userID}, (err, user) => {
+    if (user) {
+      Object.assign(user, body);
+      user.save((err) => {
+        if (err) {
+          callback(err, null, 500);
         } else {
-          callback(null, result.value, 200);
+          const { userID, userName, isAdministrator, email } = user;
+        const subset = { userID, userName, isAdministrator, email };
+          callback(null, subset, 200);
         }
+      });
+    } else {
+      callback(`No user with ID ${userID} found`, null, 404);
+    }
+  });
+};
+
+const createDefautlAdminUser = (callback) => {
+  User.findOne({userID: 'admin'}, (err, user) => {
+    if (err) {
+      callback("Error while creating default admin user.", null);
+    } else {
+      if (!user) {
+        User.create({
+          "userID": 'admin',
+          "userName": 'Admin',
+          "isAdministrator": true,
+          "password": '123',
+          "email": 'admin@app.de'
+        }, (err, user) => {
+          if (err) {
+            callback("Error while creating default admin user."), null;
+          } else {
+            callback("Default admin user created.", user);
+          }
+        }
+        );
+      } else {
+        callback("Error while creating default admin user, admin already exists.", null);
       }
-    }).select({
-      "userID": 1,
-      "userName": 1,
-      "isAdministrator": 1,
-      "email": 1,
-      "_id": 0
-    });
+    }
   }
+  );
 };
 
 module.exports = {
@@ -184,6 +149,6 @@ module.exports = {
   findUserById,
   deleteUserById,
   deleteAllUsers,
-  changeAdministratorStatus,
-  updateUserById
+  updateUserById,
+  createDefautlAdminUser
 }

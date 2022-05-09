@@ -108,35 +108,6 @@ const deleteAllUsers = (callback) => {
   });
 };
 
-// change admin status
-const changeAdministratorStatus = (userID, isAdministrator, callback) => {
-  if (isAdministrator != 'true' && isAdministrator != 'false') {
-    callback('Please provide a valid value for isAdministrator', null, 400);
-  } else {
-    User.findOneAndUpdate({
-      "userID": userID
-    }, {
-      "isAdministrator": isAdministrator
-    }, {
-      returnOriginal: false,
-      rawResult: true
-    }, (err, result) => {
-      if (err) {
-        callback(`Internal Server Error`, null, 500);
-      } else {
-        if (result.lastErrorObject.updatedExisting == false) {
-          callback(`No user with ID ${userID} found`, null, 404);
-        } else {
-          callback(null, result.value, 200);
-        }
-      }
-    }).select({
-      "_id": 0,
-      "__v": 0
-    });
-  }
-}
-
 // update user by ID
 const updateUserById = (userID, body, callback) => {
   User.findOne({"userID": userID}, (err, user) => {
@@ -163,6 +134,5 @@ module.exports = {
   findUserById,
   deleteUserById,
   deleteAllUsers,
-  changeAdministratorStatus,
   updateUserById
 }

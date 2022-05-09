@@ -73,19 +73,6 @@ PublicUserRouter.delete('/', (req, res, next) => {
   })
 });
 
-// update administrator status
-PublicUserRouter.post('/:userID/:isAdministrator', (req, res, next) => {
-  PublicUserService.changeAdministratorStatus(req.params.userID, req.params.isAdministrator, (msg, user, code) => {
-    if (user) {
-      res.status(code).json(user)
-    } else {
-      res.status(code).json({
-        Error: msg
-      });
-    }
-  });
-});
-
 // update user
 PublicUserRouter.put('/:userID', (req, res, next) => {
   PublicUserService.updateUserById(req.params.userID, req.body, (msg, user, code) => {

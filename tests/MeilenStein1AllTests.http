@@ -16,10 +16,8 @@ POST http://localhost:8080/publicUsers
 Content-Type: application/json
 
 {
-    "userID": "admin",
-    "password": "123",
-    "isAdministrator": true,
-    "email": "admin@app.com"
+    "userID": "testUser",
+    "password": "123"
 }
 
 // try to create first user again, expected response: { error: "User already exists" }

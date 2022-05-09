@@ -1,7 +1,25 @@
 // get all users, expected response: []
 ###
 GET http://localhost:8080/users
-Authorization: 
+Authorization: admin:123
+
+###
+POST http://localhost:8080/users
+Content-Type: application/json
+
+{
+    "userID": "testUser",
+    "password": "123"
+}
+
+###
+POST http://localhost:8080/authenticate
+Content-Type: application/json
+
+{
+    "userID": "admin",
+    "password": "123"
+}
 
 ###
 POST http://localhost:8080/authenticate
