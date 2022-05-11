@@ -7,7 +7,7 @@ http://localhost:8080/publicUsers
 ###
 # @name loginAdminCorrect
 GET http://localhost:8080/authenticate
-Authorization: Basic admin:123
+Authorization: Basic YWRtaW46MTIz
 
 // Login mit Basic Authentication als admin mit falschen Credentials
 ###
@@ -16,20 +16,8 @@ Authorization: Basic admin:1234
 
 @adminToken = {{loginAdminCorrect.response.headers.Authorization}}
 
-// Login mit Basic Authentication als admin mit korrekten Credentials admin:123
-###
-# @name loginTestUserCorrect
-GET http://localhost:8080/authenticate
-Authorization: Basic testUser:123
-
-@userToken = {{loginTestUserCorrect.response.headers.Authorization}}
-
 ### Auflisten aller Nutzer ohne Token
 http://localhost:8080/users
-
-### Auflisten aller Nutzer mit Token von admin
-http://localhost:8080/users
-Authorization: {{userToken}}
 
 ### Auflisten aller Nutzer mit Token von admin
 http://localhost:8080/users

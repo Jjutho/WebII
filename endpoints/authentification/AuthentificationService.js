@@ -23,7 +23,8 @@ const createSessionToken = (props, callback) => {
 
             const token = jwt.sign(
               { 
-                "user": user.userID,
+                "userID": user.userID,
+                "userName": user.userName,
                 "isAdministrator": user.isAdministrator
               },
               privateKey,

@@ -6,7 +6,7 @@ const UserService = require('./UserService');
 const auth = require('../../utils/auth');
 
 // create user
-UserRouter.post('/', (req, res, next) => {
+UserRouter.post('/', auth.isAuthenticated, auth.isAdministrator, (req, res, next) => {
   UserService.createUser(req.body, (msg, user, code) => {
     if (user) {
       res.status(code).json(user);
@@ -32,25 +32,20 @@ UserRouter.get('/', auth.isAuthenticated, auth.isAdministrator, (req, res, next)
 });
 
 // get user by ID
-UserRouter.get('/:userID', (req, res, next) => {
+UserRouter.get('/:userID', auth.isAuthenticated, auth.isAdministrator, (req, res, next) => {
   UserService.findUserById(req.params.userID, (msg, user, code) => {
     if (user) {
-      res.status(code).json({
-        userID: user.userID,  
-        userName: user.userName,
-        isAdministrator: user.isAdministrator,
-        email: user.email
-      });
+      res.status(code).json(user);
     } else {
       res.status(code).json({
         Error: msg
       });
     }
-  });
+  }, true);
 });
 
 // delete user by ID
-UserRouter.delete('/:userID', (req, res, next) => {
+UserRouter.delete('/:userID', auth.isAuthenticated, auth.isAdministrator, (req, res, next) => {
   UserService.deleteUserById(req.params.userID, (msg, result, code) => {
     if(result) {
       res.status(code).json({
@@ -80,7 +75,7 @@ UserRouter.delete('/', (req, res, next) => {
 });
 
 // update user
-UserRouter.put('/:userID', (req, res, next) => {
+UserRouter.put('/:userID', auth.isAuthenticated, auth.isAdministrator,(req, res, next) => {
   UserService.updateUserById(req.params.userID, req.body, (msg, user, code) => {
     if (user) {
       res.status(code).json(user)

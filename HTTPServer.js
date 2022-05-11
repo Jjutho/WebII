@@ -9,6 +9,8 @@ const PublicUserRouter = require('./endpoints/publicUser/PublicUserRoute');
 const UserRouter = require('./endpoints/user/UserRoute');
 const AuthRouter = require('./endpoints/authentification/AuthenticationRoute');
 
+const ForumThreadRouter = require('./endpoints/forumThread/ForumThreadRoute');
+
 const UserService = require('./endpoints/user/UserService');
 
 app.use(bodyparser.json());
@@ -17,6 +19,7 @@ app.use(bodyparser.json());
 app.use('/publicUsers', PublicUserRouter)
 app.use('/users', UserRouter);
 app.use('/authenticate', AuthRouter);
+app.use('/forumThreads', ForumThreadRouter);
 
 // init DB
 database.initDB((err, db) => {

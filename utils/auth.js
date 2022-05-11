@@ -28,8 +28,8 @@ const isAdministrator = (req, res, next) => {
   if (req.user.isAdministrator) {
     next();
   } else {
-    res.status(403).json({
-      Error: 'Access rights not sufficient'
+    res.status(401).json({
+      Error: 'Not authorized'
     });
   }
 }
