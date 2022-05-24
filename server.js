@@ -1,13 +1,11 @@
 const express = require('express');
 const https = require('https');
 const fs = require('fs');
-
-// console.log(process.env.NODE_ENV);
-
+//console.log(process.env.NODE_ENV);
+//console.log(process.env.PORT);
 const bodyparser = require('body-parser');
 
 const app = express();
-
 
 const key = fs.readFileSync('./cert/key.pem');
 const cert = fs.readFileSync('./cert/cert.pem');
