@@ -95,6 +95,6 @@ describe('Testing Routes that don\'t need authentication ', () => {
 
 afterAll(async () => {
   await mongoose.connection.db.dropDatabase()
-  await mongoose.connection.close()
-  await app.close();
+  mongoose.connection.close()
+  app.close();
 })
