@@ -8,7 +8,6 @@ const app = require('../server.js');
 const User = require('../endpoints/user/UserModel');
 const ForumThread = require('../endpoints/forumThread/ForumThreadModel');
 const ForumMessage = require('../endpoints/forumMessage/ForumMessageModel');
-const server = require('../server.js');
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
@@ -17,6 +16,8 @@ beforeAll(async () => {
     useNewUrlParser: config.get('db.dbConfigOptions.useNewUrlParser'),
     useUnifiedTopology: config.get('db.dbConfigOptions.useUnifiedTopology')
   });
+
+  await mongoose.connection.db.dropDatabase()
 
   const users = [...Array(25)].map(user => (
     {
@@ -78,6 +79,7 @@ describe('Testing Routes that don\'t need authentication ', () => {
     expect(thread).toHaveProperty('name');
     expect(thread).toHaveProperty('description');
     expect(thread).toHaveProperty('ownerID');
+    console.log('Successfully tested forumThreads route!');
   });
   // /forumMessages
   it('should show all messages', async () => {
@@ -90,11 +92,12 @@ describe('Testing Routes that don\'t need authentication ', () => {
     expect(message).toHaveProperty('userID');
     expect(message).toHaveProperty('likes');
     expect(message).toHaveProperty('dislikes');
+    console.log('Successfully tested forumMessages route!');
   });
 });
 
 afterAll(async () => {
-  await mongoose.connection.db.dropDatabase()
-  mongoose.connection.close()
-  app.close();
+  await mongoose.connection.db.dropDatabase();
+  await mongoose.connection.close();
+  await app.close();
 })
