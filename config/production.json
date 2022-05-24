@@ -1,7 +1,4 @@
 {
-  "app": {
-    "port": 80
-  },
   "session": {
     "tokenKey": "adjklfhw3784zsefjhaea34hfg9aqdsaffghdrdfgfd",
     "timeout": 300
