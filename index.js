@@ -1,7 +1,13 @@
 // import server
 const server = require('./server');
 
-const PORT = process.env.PORT || 443
+let PORT;
+
+if (process.env.NODE_ENV === 'production') {
+  PORT = process.env.PORT || 80;
+} else {
+  PORT = 443;
+}
 
 // start listening on server
 server.listen(PORT, () => {

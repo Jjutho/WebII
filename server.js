@@ -66,10 +66,15 @@ app.use((req, res, next) => {
   });
 });
 
-// create server
-const server = https.createServer({
-  key: key,
-  cert: cert
-}, app);
+let server;
+// create server with https locally
+if (process.env.NODE_ENV === 'production') {
+  server = app;
+} else {
+  server = https.createServer({
+    key: key,
+    cert: cert
+  }, app);
+}
 
 module.exports = server;
