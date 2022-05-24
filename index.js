@@ -1,14 +1,7 @@
 // import server
 const server = require('./server');
 
-let PORT;
-// port
-if (process.env.NODE_ENV === 'production') {
-  PORT = process.env.PORT || 5000
-} else {
-  const config = require('config');
-  PORT = config.get('app.port');
-}
+const PORT = process.env.PORT || 5000
 
 // start listening on server
 server.listen(PORT, () => {
