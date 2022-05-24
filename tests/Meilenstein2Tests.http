@@ -12,7 +12,7 @@ Authorization: Basic YWRtaW46MTIz
 // Login mit Basic Authentication als admin mit falschen Credentials
 ###
 GET http://localhost:8080/authenticate
-Authorization: Basic admin:1234
+Authorization: Basic admin2:1234
 
 @adminToken = {{loginAdminCorrect.response.headers.Authorization}}
 

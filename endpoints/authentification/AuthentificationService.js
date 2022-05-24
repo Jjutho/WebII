@@ -43,7 +43,7 @@ const createSessionToken = (props, callback) => {
         }
       });
     } else {
-      callback(`Failed to create token: No user with ID ${props.userID} found`, null, null, 404);
+      callback(`Failed to create token: No user with ID ${props.userID} found, therefore Authentication failed`, null, null, 401);
     }
   }, false);
 }
