@@ -136,7 +136,7 @@ const createDefautlAdminUser = (callback) => {
         }
         );
       } else {
-        callback("Error while creating default admin user, admin already exists.", null);
+        callback("Admin account confirmed.", null);
       }
     }
   }

@@ -68,7 +68,7 @@ app.use((req, res, next) => {
 
 let server;
 // create server with https locally
-if (process.env.NODE_ENV === 'production') {
+if (process.env.NODE_ENV === 'heroku-prod') {
   server = app;
 } else {
   server = https.createServer({
