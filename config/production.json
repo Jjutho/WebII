@@ -1,6 +1,9 @@
 {
+  "app": {
+    "port": 443
+  },
   "session": {
-    "tokenKey": "dfggjlsknaspdfijsdkafödjfpiafjvtiwrghffbww",
+    "tokenKey": "adjklfhw3784zsefjhaea34hfg9aqdsaffghdrdfgfd",
     "timeout": 300
   },
   "db": {

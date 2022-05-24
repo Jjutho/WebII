@@ -1,9 +1,16 @@
 {
-  "db": {
-    "dbConfigOptions": {
-      "useNewUrlParser": true,
-      "useUnifiedTopology": true
-    },
-    "connectionString": "mongodb://localhost/TestDB"
-  }
+  "app": {
+  "port": 443
+},
+"session": {
+  "tokenKey": "dfggjlsknaspdfijsdkafödjfpiafjvtiwrghffbww",
+  "timeout": 300
+},
+"db": {
+  "dbConfigOptions": {
+    "useNewUrlParser": true,
+    "useUnifiedTopology": true
+  },
+  "connectionString": "mongodb://127.0.0.1:27017/DevDB"
+}
 }

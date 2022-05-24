@@ -2,6 +2,7 @@ const express = require('express');
 const ForumThreadRouter = express.Router();
 
 const ForumThreadService = require('./ForumThreadService');
+const ForumMessageService = require('../forumMessage/ForumMessageService');
 
 const auth = require('../../utils/auth');
 
@@ -61,6 +62,19 @@ ForumThreadRouter.get('/:threadID', (req, res, next) => {
   ForumThreadService.getForumThreadById(req.params.threadID, (msg, thread, code) => {
     if (thread) {
       res.status(code).json(thread);
+    } else {
+      res.status(code).json({
+        Error: msg
+      });
+    }
+  });
+});
+
+// get forumMessages by threadId
+ForumThreadRouter.get('/:forumThreadID/forumMessages', (req, res, next) => {
+  ForumMessageService.getForumMessagesByForumThreadId(req.params.forumThreadID, (msg, messages, code) => {
+    if (messages) {
+      res.status(code).json(messages);
     } else {
       res.status(code).json({
         Error: msg
