@@ -8,13 +8,11 @@ const app = require('../server.js');
 const User = require('../endpoints/user/UserModel');
 const ForumThread = require('../endpoints/forumThread/ForumThreadModel');
 const ForumMessage = require('../endpoints/forumMessage/ForumMessageModel');
+const server = require('../server.js');
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
 beforeAll(async () => {
-
-  server = require('../server');
-
   await mongoose.connect(DBconnectionString, {
     useNewUrlParser: config.get('db.dbConfigOptions.useNewUrlParser'),
     useUnifiedTopology: config.get('db.dbConfigOptions.useUnifiedTopology')
@@ -98,4 +96,5 @@ describe('Testing Routes that don\'t need authentication ', () => {
 afterAll(async () => {
   await mongoose.connection.db.dropDatabase()
   await mongoose.connection.close()
+  await app.close();
 })
