@@ -4,8 +4,16 @@
   "description": "WebEngineering II Projekt SoSe2022",
   "main": "index.js",
   "scripts": {
-    "start": "SET NODE_ENV=production&& node HTTPServer.js",
-    "dev": "SET NODE_ENV=development&& nodemon HTTPServer.js"
+    "start": "SET NODE_ENV=development&& nodemon index.js",
+    "start:prod": "SET NODE_ENV=production&& node index.js",
+    "test": "jest tests --detectOpenHandles"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "verbose": true,
+    "coveragePathIgnorePatterns": [
+      "/node_modules/"
+    ]
   },
   "author": "Julian T. Hoff",
   "license": "ISC",
@@ -16,9 +24,12 @@
     "config": "^3.3.7",
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
+    "faker": "^5.5.3",
+    "jest": "^28.1.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.2.10",
     "nodemon": "^2.0.15",
-    "openssl": "^2.0.0"
+    "openssl": "^2.0.0",
+    "supertest": "^6.2.3"
   }
 }

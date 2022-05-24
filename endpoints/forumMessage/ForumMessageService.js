@@ -18,8 +18,8 @@ const createForumMessage = (forumMessage, userID, callback) => {
           if (err) {
             callback(`Creation of message failed`, null, 500);
             } else {
-              const { _id, title, text, forumThreadID, userID, edited } = message;
-              const subset = { _id, title, text, forumThreadID, userID, edited };
+              const { _id, title, text, forumThreadID, userID, edited, likes, dislikes } = message;
+              const subset = { _id, title, text, forumThreadID, userID, edited, likes, dislikes };
               callback(null, subset, 200);
             }
           });
@@ -37,8 +37,8 @@ const getForumMessagesByForumThreadId = (forumThreadID, callback) => {
       ForumMessage.find({forumThreadID: forumThreadID}).exec((err, messages) => {
         if (messages) {
           let filteredMessages = messages.map(message => {
-            const { _id, title, text, forumThreadID, userID, edited } = message;
-            return { _id, title, text, forumThreadID, userID, edited };
+            const { _id, title, text, forumThreadID, userID, edited, likes, dislikes } = message;
+            return { _id, title, text, forumThreadID, userID, edited, likes, dislikes };
           });
           callback(null, filteredMessages, 200);
         } else {
@@ -58,8 +58,8 @@ const getForumMessages = (callback) => {
       callback('Error while getting ForumMessages', null, 500);
     } else {
       let filteredMessages = messages.map(message => {
-        const { _id, title, text, forumThreadID, userID, edited } = message;
-        return { _id, title, text, forumThreadID, userID, edited };
+        const { _id, title, text, forumThreadID, userID, edited, likes, dislikes } = message;
+        return { _id, title, text, forumThreadID, userID, edited, likes, dislikes };
       });
       callback(null, filteredMessages, 200);
     }
@@ -72,8 +72,8 @@ const getForumMessageById = (messageID, callback) => {
       callback('Error while getting ForumMessage', null, 500);
     } else {
       if (message) {
-        const { _id, title, text, forumThreadID, userID, edited } = message;
-        const subset = { _id, title, text, forumThreadID, userID, edited };
+        const { _id, title, text, forumThreadID, userID, edited, likes, dislikes } = message;
+        const subset = { _id, title, text, forumThreadID, userID, edited, likes, dislikes };
         callback(null, subset, 200);
       } else {
         callback(`No ForumMessage with ID "${messageID}" found`, null, 404);
@@ -88,8 +88,8 @@ const getForumMessagesByUserId = (userID, callback) => {
       callback('Error while getting ForumMessages of current user', null, 500);
     } else {
       let filteredMessages = messages.map(message => {
-        const { _id, title, text, forumThreadID, userID, edited } = message;
-        return { _id, title, text, forumThreadID, userID, edited };
+        const { _id, title, text, forumThreadID, userID, edited, likes, dislikes } = message;
+        return { _id, title, text, forumThreadID, userID, edited, likes, dislikes };
       });
       callback(null, filteredMessages, 200);
     }
@@ -106,8 +106,8 @@ const updateForumMessageById = (messageID, forumMessage, userID, isAdministrator
           if (err) {
             callback('Error while updating ForumMessage', null, 500);
           } else {
-            const { _id, title, text, forumThreadID, userID, edited } = message;
-            const subset = { _id, title, text, forumThreadID, userID, edited };
+            const { _id, title, text, forumThreadID, userID, edited, likes, dislikes } = message;
+            const subset = { _id, title, text, forumThreadID, userID, edited, likes, dislikes };
             callback(null, subset, 200);
           }
         });
