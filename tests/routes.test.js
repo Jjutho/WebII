@@ -48,8 +48,8 @@ beforeAll(async () => {
       text: faker.lorem.sentence(20),
       forumThreadID: faker.random.alphaNumeric(15),
       userID: faker.name.firstName(),
-      likes: faker.random.number(100),
-      dislikes: faker.random.number(100)
+      likes: faker.datatype.number(100),
+      dislikes: faker.datatype.number(100)
     }
   ));
 
@@ -69,6 +69,12 @@ describe('Testing Routes that don\'t need authentication ', () => {
     expect(user).toHaveProperty('password');
     expect(user).toHaveProperty('email');
     console.log('Successfully tested publicUsers route!');
+  });
+  // /users
+  it('should reject this request', async () => {
+    const res = await request(app).get('/users');
+    expect(res.statusCode).toBe(401);
+    console.log('Successfully tested /users route!');
   });
   // /forumThreads
   it('should show all forumThreads', async () => {

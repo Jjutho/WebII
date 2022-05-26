@@ -96,12 +96,16 @@ const getForumMessagesByUserId = (userID, callback) => {
   });
 }
 
+// update forumMessage
 const updateForumMessageById = (messageID, forumMessage, userID, isAdministrator, callback) => {
   ForumMessage.findOne({_id: messageID}).exec((err, message) => {
     if (message) {
       if (message.userID === userID || isAdministrator) {
+        if (!message.text === forumMessage.text) {
+          message.edited = true;
+          console.log('true')
+        }
         Object.assign(message, forumMessage);
-        message.edited = true;
         message.save((err) => {
           if (err) {
             callback('Error while updating ForumMessage', null, 500);
@@ -120,6 +124,7 @@ const updateForumMessageById = (messageID, forumMessage, userID, isAdministrator
   });
 }
 
+// delete forumMessage
 const deleteForumMessageById = (messageID, userID, isAdministrator, callback) => {
   ForumMessage.findOne({_id: messageID}).exec((err, message) => {
     if (message) {

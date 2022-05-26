@@ -11,6 +11,6 @@
       "useNewUrlParser": true,
       "useUnifiedTopology": true
     },
-    "connectionString": "mongodb+srv://WebIIAdmin:UUvVTBIPmocQqfgx@webii-cluster.gnxxp42.mongodb.net/?retryWrites=true&w=majority"
+    "connectionString": "mongodb://127.0.0.1:27017/DevDB"
   }
 }

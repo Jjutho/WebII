@@ -6,8 +6,8 @@ const ForumMessageSchema = new mongoose.Schema({
   forumThreadID: { type: String, required: true },
   userID: { type: String, required: true },
   edited: { type: Boolean, default: false },
-  likes: Number || 0,
-  dislikes: Number || 0
+  likes: { type: Number, default: 0 },
+  dislikes: { type: Number, default: 0 }
 }, { timestamps: true}
 );
 
