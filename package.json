@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "SET NODE_ENV=production&& node index.js",
-    "heroku-start": "NODE_ENV=production node index.js",
+    "heroku-start": "NODE_ENV=heroku-prod node index.js",
     "start:dev": "SET NODE_ENV=development&& nodemon index.js",
     "test": "jest tests --detectOpenHandles"
   },
