@@ -21,4 +21,15 @@ jobs:
       with:
         node-version: '16.13.1'
     - run: npm ci
-    - run: npm run test
+
+  deploy:
+  
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v2
+      - uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ff75410e-b555-4fc8-bb64-98dde7f7fd99
+          heroku_app_name: "web2-julianhoff"
+          heroku_email: "s83089@bht-berlin.de"
