@@ -4,7 +4,7 @@
   "description": "WebEngineering II Projekt SoSe2022",
   "main": "index.js",
   "scripts": {
-    "start": "SET NODE_ENV=production&& node index.js",
+    "start": "NODE_ENV=production node index.js",
     "heroku-start": "NODE_ENV=production node index.js",
     "start:dev": "SET NODE_ENV=development&& nodemon index.js",
     "test": "jest tests --detectOpenHandles"
