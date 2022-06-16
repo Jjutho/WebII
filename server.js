@@ -1,6 +1,7 @@
 const express = require('express');
 const https = require('https');
 const fs = require('fs');
+const cors = require('cors');
 //console.log(process.env.NODE_ENV);
 //console.log(process.env.PORT);
 const bodyparser = require('body-parser');
@@ -22,6 +23,17 @@ const ForumMessageRouter = require('./endpoints/forumMessage/ForumMessageRoute')
 const UserService = require('./endpoints/user/UserService');
 
 app.use(bodyparser.json());
+
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  next();
+});
+
+app.use(cors({
+  exposedHeaders:['Authorization']
+}));
 
 // routes
 app.use('/publicUsers', PublicUserRouter)
