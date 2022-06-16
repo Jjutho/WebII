@@ -17,7 +17,7 @@ beforeAll(async () => {
     useUnifiedTopology: config.get('db.dbConfigOptions.useUnifiedTopology')
   });
 
-  await mongoose.connection.db.dropDatabase()
+  //await mongoose.connection.db.dropDatabase()
 
   const users = [...Array(25)].map(user => (
     {

@@ -101,7 +101,7 @@ const updateForumMessageById = (messageID, forumMessage, userID, isAdministrator
   ForumMessage.findOne({_id: messageID}).exec((err, message) => {
     if (message) {
       if (message.userID === userID || isAdministrator) {
-        if (!message.text === forumMessage.text) {
+        if (!(message.text === forumMessage.text)) {
           message.edited = true;
           console.log('true')
         }
